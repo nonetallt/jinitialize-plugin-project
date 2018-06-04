@@ -10,32 +10,24 @@ trait Paths
         return dirname(dirname(__DIR__));
     }
 
-    private function stubsFolder()
+    private function outputFolder(string $file = null)
     {
-        return $this->projectRoot() . '/stubs';
+        return $this->appendFile(dirname(__DIR__).'/output', $file);
     }
 
-    private function outputFolder()
+    private function inputFolder(string $file = null)
     {
-        return __DIR__ . '/../output';
-    }
-
-    private function outputFile()
-    {
-        return $this->outputFolder() . '/command.out';
-    }
-
-    private function inputFolder()
-    {
-        return dirname(__DIR__).'/input';
+        return $this->appendFile(dirname(__DIR__).'/input', $file);
     }
 
     private function expectedFolder(string $file = null)
     {
-        $path =  dirname(__DIR__).'/expected';
+        return $this->appendFile(dirname(__DIR__).'/expected', $file);
+    }
 
+    private function appendFile(string $path, string $file = null)
+    {
         if(! is_null($file)) $path .= "/$file";
-
         return $path;
     }
 }
