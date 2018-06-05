@@ -42,6 +42,7 @@ class RoboFile extends \Robo\Tasks
         $files = array_diff(scandir(__DIR__.'/src/Commands'), ['..', '.']);
         $commands = [];
 
+
         foreach($files as $file) {
             /* Get full class name */
             $class = "$namespace$file";

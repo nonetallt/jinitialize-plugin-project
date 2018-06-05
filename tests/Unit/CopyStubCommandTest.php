@@ -15,7 +15,7 @@ class CopyStubCommandTest extends TestCase
 
     public function testCopyWithoutChanges()
     {
-        $this->runCommand("project:copy-stub $this->input $this->output");
+        $this->runCommand("project:copy $this->input $this->output");
         $this->assertEquals(file_get_contents($this->input), file_get_contents($this->output));
     }
 
@@ -25,7 +25,7 @@ class CopyStubCommandTest extends TestCase
         $_ENV['variable1'] = 'env1';
         $_ENV['variable2'] = 'env2';
 
-        $this->runCommand("project:copy-stub $this->input $this->output --env");
+        $this->runCommand("project:copy $this->input $this->output --env");
         $this->assertEquals(file_get_contents($expected), file_get_contents($this->output));
     }
 
@@ -36,7 +36,7 @@ class CopyStubCommandTest extends TestCase
         $container = $this->getApplication()->getContainer()->getPlugin('project')->getContainer();
         $container->set('variable3', 'value3');
 
-        $this->runCommand("project:copy-stub $this->input $this->output --exported");
+        $this->runCommand("project:copy $this->input $this->output --exported");
         $this->assertEquals(file_get_contents($expected), file_get_contents($this->output));
     }
 
@@ -49,14 +49,14 @@ class CopyStubCommandTest extends TestCase
         $container = $this->getApplication()->getContainer()->getPlugin('project')->getContainer();
         $container->set('variable3', 'value3');
 
-        $this->runCommand("project:copy-stub $this->input $this->output --exported");
+        $this->runCommand("project:copy $this->input $this->output --exported");
         $this->assertEquals(file_get_contents($expected), file_get_contents($this->output));
     }
 
     public function testAbortWhenFormatDoesNotContainDollarSymbol()
     {
         $this->expectException(CommandAbortedException::class);
-        $this->runCommand("project:copy-stub $this->input $this->output --format=[]");
+        $this->runCommand("project:copy $this->input $this->output --format=[]");
     }
 
     public function testSetFormat()
@@ -65,7 +65,7 @@ class CopyStubCommandTest extends TestCase
         $expected = $this->expectedFolder('test-set-format');
         $_ENV['variable1'] = 'env1';
 
-        $this->runCommand("project:copy-stub $this->input $this->output --env --format={{\$}}");
+        $this->runCommand("project:copy $this->input $this->output --env --format={{\$}}");
         $this->assertEquals(file_get_contents($expected), file_get_contents($this->output));
 
     }
@@ -75,7 +75,17 @@ class CopyStubCommandTest extends TestCase
         $path = $this->inputFolder();
         $this->runCommandsAsProcedure([
             "project:set-input-path $path", 
-            "project:copy-stub copy-test.txt $this->output"
+            "project:copy copy-test.txt $this->output"
+        ]);
+        $this->assertEquals(file_get_contents($this->input), file_get_contents($this->output));
+    }
+
+    public function testCanUseOutputPathSetBySetOutputPathCommand()
+    {
+        $path = $this->outputFolder();
+        $this->runCommandsAsProcedure([
+            "project:set-output-path $path", 
+            "project:copy $this->input copy-test.txt"
         ]);
         $this->assertEquals(file_get_contents($this->input), file_get_contents($this->output));
     }

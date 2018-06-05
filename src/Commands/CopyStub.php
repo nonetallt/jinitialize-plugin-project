@@ -10,12 +10,12 @@ use Nonetallt\Jinitialize\JinitializeCommand;
 
 class CopyStub extends JinitializeCommand
 {
-    private $file;
+    private $out;
 
     protected function configure()
     {
-        $this->setName('copy-stub');
-        $this->setDescription('Copy a file to the project folder.');
+        $this->setName('copy');
+        $this->setDescription('Copy file from input to output.');
         $this->setHelp('');
         $this->addArgument('input', InputArgument::REQUIRED, 'The file you want to copy.');
         $this->addArgument('output', InputArgument::REQUIRED, 'Filepath for the new file.');
@@ -32,13 +32,25 @@ class CopyStub extends JinitializeCommand
 
     protected function handle($input, $output, $style)
     {
-        $path = $this->import('project', 'inputPath') ?? '';
-        $this->file = $path . $input->getArgument('input');
+        $in = $this->inputPath($input);
+        $this->out = $this->outputPath($input);
 
-        $stub = new StubGenerator($this->file, $input->getArgument('output'));
+        $stub = new StubGenerator($in, $this->out);
         $stub->render($this->getReplacements($input));
 
-        $this->export('lastCreatedFile', $this->file);
+        $this->export('lastCreatedFile', $this->out);
+    }
+
+    private function inputPath($input)
+    {
+        $path = $this->import('project', 'inputPath') ?? '';
+        return $path  . $input->getArgument('input');
+    }
+
+    private function outputPath($input)
+    {
+        $path = $this->import('project', 'outputPath') ?? '';
+        return $path  . $input->getArgument('output');
     }
 
     /**
@@ -80,12 +92,13 @@ class CopyStub extends JinitializeCommand
     public function revert()
     {
         // Revert changes made by handle if possible
-        unlink($this->file);
+        unlink($this->out);
     }
 
     public function recommendsExecuting()
     {
         return [
+            SetInputPath::class,
             CreateProject::class           
         ];
     }
