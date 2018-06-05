@@ -38,3 +38,13 @@ if(!function_exists('str_after')) {
 
     }
 }
+
+if(!function_exists('ends_with')) {
+    function ends_with(string $subject, string $end)
+    {
+        $len = strlen($end);
+        $str = substr($subject, -$len);
+
+        return $str === $end;
+    }
+}

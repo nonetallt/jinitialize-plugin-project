@@ -41,7 +41,8 @@
                 "Nonetallt\\Jinitialize\\Plugin\\Project\\Commands\\CopyFile",
                 "Nonetallt\\Jinitialize\\Plugin\\Project\\Commands\\CopyStub",
                 "Nonetallt\\Jinitialize\\Plugin\\Project\\Commands\\CreateFolder",
-                "Nonetallt\\Jinitialize\\Plugin\\Project\\Commands\\CreateProject"
+                "Nonetallt\\Jinitialize\\Plugin\\Project\\Commands\\CreateProject",
+                "Nonetallt\\Jinitialize\\Plugin\\Project\\Commands\\SetInputPath"
             ],
             "settings": [
                 "defaultProjectsFolder"

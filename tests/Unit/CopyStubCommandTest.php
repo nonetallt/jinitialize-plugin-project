@@ -61,12 +61,23 @@ class CopyStubCommandTest extends TestCase
 
     public function testSetFormat()
     {
+        $this->input = $this->inputFolder('format-test.txt');
+        $expected = $this->expectedFolder('test-set-format');
+        $_ENV['variable1'] = 'env1';
+
+        $this->runCommand("project:copy-stub $this->input $this->output --env --format={{\$}}");
+        $this->assertEquals(file_get_contents($expected), file_get_contents($this->output));
 
     }
 
     public function testCanUseInputPathSetBySetInputPathCommand()
     {
-
+        $path = $this->inputFolder();
+        $this->runCommandsAsProcedure([
+            "project:set-input-path $path", 
+            "project:copy-stub copy-test.txt $this->output"
+        ]);
+        $this->assertEquals(file_get_contents($this->input), file_get_contents($this->output));
     }
 
     public function setUp()

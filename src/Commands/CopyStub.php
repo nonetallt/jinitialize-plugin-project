@@ -32,7 +32,8 @@ class CopyStub extends JinitializeCommand
 
     protected function handle($input, $output, $style)
     {
-        $this->file = $input->getArgument('input');
+        $path = $this->import('project', 'inputPath') ?? '';
+        $this->file = $path . $input->getArgument('input');
 
         $stub = new StubGenerator($this->file, $input->getArgument('output'));
         $stub->render($this->getReplacements($input));
