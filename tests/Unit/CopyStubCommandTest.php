@@ -49,7 +49,7 @@ class CopyStubCommandTest extends TestCase
         $container = $this->getApplication()->getContainer()->getPlugin('project')->getContainer();
         $container->set('variable3', 'value3');
 
-        $this->runCommand("project:copy $this->input $this->output --exported");
+        $this->runCommand("project:copy $this->input $this->output --exported --env");
         $this->assertEquals(file_get_contents($expected), file_get_contents($this->output));
     }
 

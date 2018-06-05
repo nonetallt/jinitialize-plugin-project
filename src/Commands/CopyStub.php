@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 use SebastiaanLuca\StubGenerator\StubGenerator;
 
 use Nonetallt\Jinitialize\JinitializeCommand;
+use Nonetallt\Jinitialize\JinitializeContainer;
 
 class CopyStub extends JinitializeCommand
 {
@@ -24,14 +25,22 @@ class CopyStub extends JinitializeCommand
         $this->addOption('format', 'f', InputOption::VALUE_REQUIRED, $msg, '[$]');
 
         $msg = 'Replace values that exist in as exported values';
-        $this->addOption('exported', 'x', InputOption::VALUE_OPTIONAL, $msg);
+        $this->addOption('exported', 'x', InputOption::VALUE_NONE, $msg);
 
         $msg = 'Replace values that exist in .env';
-        $this->addOption('env', null, InputOption::VALUE_OPTIONAL, $msg);
+        $this->addOption('env', 'e', InputOption::VALUE_NONE, $msg);
     }
 
     protected function handle($input, $output, $style)
     {
+        $format = $input->getOption('format');
+
+        /* Validate format */
+        if(strpos($format, '$') === false) {
+            $msg = "Invalid format $format, format must contain the character \$";
+            $this->abort($msg);
+        } 
+
         $in = $this->inputPath($input);
         $this->out = $this->outputPath($input);
 
@@ -63,15 +72,15 @@ class CopyStub extends JinitializeCommand
         $replacements = [];
 
         /* Get env values */
-        if($input->hasOption('env')) {
+        if($this->wasOptionPassed($input, 'env')) {
             foreach($_ENV as $key => $value) {
                 $replacements[$this->formatReplacement($input, $key)] = $value;
             }
         }
 
         /* Get exported values */
-        if($input->hasOption('exported')) {
-            foreach($this->getApplication()->getContainer()->getData() as $plugin => $data) {
+        if($this->wasOptionPassed($input, 'exported')) {
+            foreach($this->getContainerData() as $plugin => $data) {
                 foreach($data as $key => $value) {
                     $replacements[$this->formatReplacement($input, "$plugin:$key")] = $value;
                 }
@@ -85,9 +94,6 @@ class CopyStub extends JinitializeCommand
      */
     private function formatReplacement($input, $key)
     {
-        $format = $input->getOption('format');
-        if(strpos($format, '$') === false) $this->abort('Invalid format, format must contain the character $');
-
         return str_replace('$', $key, $input->getOption('format'));
     }
 
