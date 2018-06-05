@@ -33,7 +33,8 @@ class CreateProjectCommandTest extends TestCase
         $this->assertContainerEquals([
             'projectName' => 'test',
             'projectPath' => $output,
-            'projectRoot' => "$output/test"
+            'projectRoot' => "$output/test",
+            'outputPath'  => "$output/test/",
         ],
         'project');
     }

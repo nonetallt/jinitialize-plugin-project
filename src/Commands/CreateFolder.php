@@ -26,13 +26,15 @@ class CreateFolder extends JinitializeCommand
         $folder = $input->getArgument('folder');
         $mode = $input->getOption('permissions') ?? 0755;
 
-        $this->folder = "$projectDir/$folder";
+        $this->folder = "$projectDir$folder";
         $this->createFolder($mode);
     }
 
     private function getProjectDir($style)
     {
-        $projectDir = $this->import('project', 'projectPath');
+        /* Use output path, if that is null, use projectPath instead */
+        $projectDir = $this->import('project', 'outputPath') ?? $this->import('project', 'projectPath') . '/';
+
         if(! is_null($projectDir)) return $projectDir;
 
         $message = 'Give a root path where the folder should be created';
@@ -48,6 +50,7 @@ class CreateFolder extends JinitializeCommand
 
     private function createFolder($mode) 
     {
+        var_dump($this->folder);
         if(! mkdir($this->folder, $mode)) {
             $this->abort("Folder $this->folder could not be created");
         }

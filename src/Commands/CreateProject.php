@@ -38,8 +38,13 @@ class CreateProject extends JinitializeCommand
         $this->export('projectPath', $path);
         $this->export('projectRoot', "$path/$name");
 
+        /* Create project folder */
         $command = new CreateFolder($this->getPluginName());
         $command->run(new ArrayInput(['folder' => $name, '--permissions' => $permissions]), $output);
+
+        /* Set output directory default to project root */
+        $command = new SetOutputPath($this->getPluginName());
+        $command->run(new ArrayInput(['path' => $this->import('project', 'projectRoot')]), $output);
     }
 
     public function revert()
