@@ -38,6 +38,8 @@ class CopyStub extends JinitializeCommand
         $stub = new StubGenerator($in, $this->out);
         $stub->render($this->getReplacements($input));
 
+        $output->writeLn("File $in copied to $this->out");
+
         $this->export('lastCreatedFile', $this->out);
     }
 

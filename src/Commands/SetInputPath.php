@@ -28,6 +28,8 @@ class SetInputPath extends JinitializeCommand
         /* Append trailing slash if missing */
         if(! ends_with($this->path, '/')) $this->path .= '/';
 
+        $output->writeLn("Input path set: $this->path");
+
         $this->export('inputPath', $this->path);
     }
 

@@ -48,3 +48,13 @@ if(!function_exists('ends_with')) {
         return $str === $end;
     }
 }
+
+if(!function_exists('starts_with')) {
+    function starts_with(string $subject, string $start)
+    {
+        $len = strlen($end);
+        $str = substr($subject, $len);
+
+        return $str === $start;
+    }
+}

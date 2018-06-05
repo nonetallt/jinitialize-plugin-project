@@ -9,6 +9,7 @@ use Nonetallt\Jinitialize\Plugin\Project\Paths;
 
 class CreateProject extends JinitializeCommand
 {
+    private $path;
 
     protected function configure()
     {
@@ -31,12 +32,12 @@ class CreateProject extends JinitializeCommand
         });
 
         $name = $style->ask('Give a name for the new project');
-
         $permissions = $this->getInput()->getOption('permissions') ?? 0755;
+        $this->path = "$path/$name";
 
         $this->export('projectName', $name);
         $this->export('projectPath', $path);
-        $this->export('projectRoot', "$path/$name");
+        $this->export('projectRoot', $this->path);
 
         /* Create project folder */
         $command = new CreateFolder($this->getPluginName());
@@ -45,11 +46,14 @@ class CreateProject extends JinitializeCommand
         /* Set output directory default to project root */
         $command = new SetOutputPath($this->getPluginName());
         $command->run(new ArrayInput(['path' => $this->import('project', 'projectRoot')]), $output);
+
+        $output->writeLn("Project created: $this->path");
     }
 
     public function revert()
     {
         // Revert changes made by handle if possible
+        rmdir($this->path);
     }
 
     public function recommendsRunning()

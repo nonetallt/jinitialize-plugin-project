@@ -26,41 +26,49 @@ class CreateFolder extends JinitializeCommand
         $folder = $input->getArgument('folder');
         $mode = $input->getOption('permissions') ?? 0755;
 
-        $this->folder = "$projectDir$folder";
-        $this->createFolder($mode);
+        /* Remove first slash from the folder argument to prevent double slash
+            with getProjectDir
+         */
+        if(starts_with($folder, '/')) $folder = str_after($folder, '/');
+
+        $this->createFolder("$projectDir$folder", $mode, $output);
     }
 
     private function getProjectDir($style)
     {
         /* Use output path, if that is null, use projectPath instead */
-        $projectDir = $this->import('project', 'outputPath') ?? $this->import('project', 'projectPath') . '/';
+        $projectDir = $this->import('project', 'outputPath') ?? $this->import('project', 'projectPath');
 
-        if(! is_null($projectDir)) return $projectDir;
+        /* If not found, ask user */
+        if(is_null($projectDir)) {
+            $projectDir = '';
+        }
 
-        $message = 'Give a root path where the folder should be created';
-        $projectDir = $style->ask($message, null, function($value) {
-            Paths::validate($value, function($message) {
-                $this->abort($message);
-            });
-            return $value;
-        });
-        
+        /* Append trailing slash if missing */
+        if(! ends_with($projectDir, '/')) $projectDir .= '/';
+
         return $projectDir;
     }
 
-    private function createFolder($mode) 
+    private function createFolder(string $path, $mode, $output) 
     {
-        var_dump($this->folder);
-        if(! mkdir($this->folder, $mode)) {
-            $this->abort("Folder $this->folder could not be created");
+        if(file_exists($path)) {
+            $this->abort("Folder $path can't be created, path already exists");
         }
+
+        if(! mkdir($path, $mode)) {
+            $this->abort("Folder $path could not be created");
+        }
+
+        $output->writeLn("Folder created: $path");
+        $this->folder = $path;
     }
 
     public function revert()
     {
         // Revert changes made by handle if possible
-        rmdir($this->folder);
-    }
+        if(! is_null( $this->folder )) rmdir($this->folder);
+    } 
 
     public function recommendsExecuting()
     {

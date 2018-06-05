@@ -11,27 +11,22 @@ class CreateFolderCommandTest extends TestCase
 
     public function testCreateFolder()
     {
-        /* $output = $this->outputFolder(); */
+        $output = $this->outputFolder('test');
+        $this->runCommand("project:folder $output");
 
-        /* /1* User inputs the project folder path pointing to output *1/ */
-        /* $input = [$output]; */
-
-        /* $this->runCommand('project:folder test', [], $input); */
-
-        /* $this->assertTrue(is_dir($output.'/test')); */
+        $this->assertTrue(is_dir($output));
     }
 
     public function testCreateMultilevelFolder()
     {
-        /* $output = $this->outputFolder(); */
-        /* $input = [$output]; */
-        /* $this->runCommand('project:folder test', [], $input); */
+        $output = $this->outputFolder('test');
+        $this->runCommand("project:folder $output");
 
-        /* /1* Create another folder in the created folder *1/ */
-        /* $input = [$output.'/test']; */
-        /* $this->runCommand('project:folder another', [], $input); */
+        /* Create another folder in the created folder */
+        $output = $this->outputFolder('test/another');
+        $tester = $this->runCommand("project:folder $output");
 
-        /* $this->assertTrue(is_dir($output.'/test/another')); */
+        $this->assertTrue(is_dir($output));
     }
 
     public function setUp()
