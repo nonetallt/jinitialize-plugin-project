@@ -1,6 +1,7 @@
 {
     "name": "nonetallt\/jinitialize-plugin-project",
     "description": "Directory and file manipulation for jinitialize",
+    "keywords": ["stubs", "copy", "folder", "project", "jinitialize", "plugin"],
     "type": "project",
     "require": {
         "php": ">=7.0.0",
