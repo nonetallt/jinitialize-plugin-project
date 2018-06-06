@@ -54,13 +54,13 @@ class CopyStub extends JinitializeCommand
 
     private function inputPath($input)
     {
-        $path = $this->import('project', 'inputPath') ?? '';
+        $path = $this->import('inputPath') ?? '';
         return $path  . $input->getArgument('input');
     }
 
     private function outputPath($input)
     {
-        $path = $this->import('project', 'outputPath') ?? '';
+        $path = $this->import('outputPath') ?? '';
         return $path  . $input->getArgument('output');
     }
 

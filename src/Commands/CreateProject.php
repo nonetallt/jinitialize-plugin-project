@@ -45,7 +45,7 @@ class CreateProject extends JinitializeCommand
 
         /* Set output directory default to project root */
         $command = new SetOutputPath($this->getPluginName());
-        $command->run(new ArrayInput(['path' => $this->import('project', 'projectRoot')]), $output);
+        $command->run(new ArrayInput(['path' => $this->import('projectRoot')]), $output);
 
         $output->writeLn("Project created: $this->path");
     }

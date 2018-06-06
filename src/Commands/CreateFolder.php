@@ -37,7 +37,7 @@ class CreateFolder extends JinitializeCommand
     private function getProjectDir($style)
     {
         /* Use output path, if that is null, use projectPath instead */
-        $projectDir = $this->import('project', 'outputPath') ?? $this->import('project', 'projectPath');
+        $projectDir = $this->import('outputPath') ?? $this->import('projectPath');
 
         /* If not found, ask user */
         if(is_null($projectDir)) {
