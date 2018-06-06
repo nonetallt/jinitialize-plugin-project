@@ -16,21 +16,16 @@ class CreateProject extends JinitializeCommand
         $this->setName('create');
         $this->setDescription('Create a new project directory.');
         $this->setHelp('Creates a new project at the given path and initializes project object for other commands.');
-        $this->addOption('permissions', 'p', InputOption::VALUE_OPTIONAL, 'Give access level for created folder in numeral code. Defaults to 0755');
+        $msg = 'Give access level for created folder in numeral code. Defaults to 0755';
+        $this->addOption('permissions', 'p', InputOption::VALUE_OPTIONAL, $msg);
+
+        $msg = 'Folder path where the project should be created.';
+        $this->addOption('path', 't', InputOption::VALUE_OPTIONAL, $msg);
     }
 
     protected function handle($input, $output, $style)
     {
-        $defaultPath = $_ENV['DEFAULT_PROJECTS_FOLDER'] ?? null;
-
-        $msg = 'Give a path to where the project folder should be created';
-        $path = $style->ask($msg, $defaultPath, function($value) {
-            Paths::validate($value, function($message) {
-                $this->abort($message);
-            });
-            return $value;
-        });
-
+        $path = $this->getPath($input, $style);
         $name = $style->ask('Give a name for the new project');
         $permissions = $this->getInput()->getOption('permissions') ?? 0755;
         $this->path = "$path/$name";
@@ -48,6 +43,22 @@ class CreateProject extends JinitializeCommand
         $command->run(new ArrayInput(['path' => $this->import('projectRoot')]), $output);
 
         $output->writeLn("Project created: $this->path");
+    }
+
+    private function getPath($input, $style)
+    {
+        $path = $input->getOption('path');
+
+        if(! is_null($path)) return $path;
+
+        $msg = 'Give a path to where the project folder should be created';
+
+        return $style->ask($msg, null, function($value) {
+            Paths::validate($value, function($message) {
+                $this->abort($message);
+            });
+            return $value;
+        });
     }
 
     public function revert()

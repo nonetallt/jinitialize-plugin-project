@@ -13,10 +13,22 @@ class CreateProjectCommandTest extends TestCase
     {
         $output = $this->outputFolder();
 
-        /* User inputs the project folder path pointing to output */
+        /* User inputs the project folder path and project name */
         $input = [$output, 'test'];
 
         $this->runCommand('project:create', [], $input);
+
+        $this->assertTrue(is_dir($output.'/test'));
+    }
+
+    public function testPathIsNotAskedIfProvidedAsParameter()
+    {
+        $output = $this->outputFolder();
+
+        /* User inputs the name of the project */
+        $input = ['test'];
+
+        $this->runCommand("project:create --path=$output", [], $input);
 
         $this->assertTrue(is_dir($output.'/test'));
     }
