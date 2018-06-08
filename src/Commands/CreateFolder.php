@@ -37,7 +37,7 @@ class CreateFolder extends JinitializeCommand
     private function getProjectDir($style)
     {
         /* Use output path, if that is null, use projectPath instead */
-        $projectDir = $this->import('outputPath') ?? $this->import('projectPath');
+        $projectDir = $this->import('outputPath') ?? $this->import('parent');
 
         /* If not found, ask user */
         if(is_null($projectDir)) {
@@ -62,6 +62,8 @@ class CreateFolder extends JinitializeCommand
 
         $output->writeLn("Folder created: $path");
         $this->folder = $path;
+
+        $this->export('last_created_folder', $this->folder);
     }
 
     public function revert()

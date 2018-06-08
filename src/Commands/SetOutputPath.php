@@ -30,7 +30,7 @@ class SetOutputPath extends JinitializeCommand
 
         $output->writeLn("Output path set: $this->path");
 
-        $this->export('outputPath', $this->path);
+        $this->export('output_path', $this->path);
     }
 
     public function revert()

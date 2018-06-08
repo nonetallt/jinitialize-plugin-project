@@ -49,18 +49,18 @@ class CopyStub extends JinitializeCommand
 
         $output->writeLn("File $in copied to $this->out");
 
-        $this->export('lastCreatedFile', $this->out);
+        $this->export('last_created_file', $this->out);
     }
 
     private function inputPath($input)
     {
-        $path = $this->import('inputPath') ?? '';
+        $path = $this->import('input_path') ?? '';
         return $path  . $input->getArgument('input');
     }
 
     private function outputPath($input)
     {
-        $path = $this->import('outputPath') ?? '';
+        $path = $this->import('output_path') ?? '';
         return $path  . $input->getArgument('output');
     }
 

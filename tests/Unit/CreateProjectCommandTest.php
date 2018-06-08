@@ -43,10 +43,11 @@ class CreateProjectCommandTest extends TestCase
         $this->runCommand('project:create', [], $input);
 
         $this->assertContainerEquals([
-            'projectName' => 'test',
-            'projectPath' => $output,
-            'projectRoot' => "$output/test",
-            'outputPath'  => "$output/test/",
+            'name'                => 'test',
+            'parent'              => $output,
+            'path'                => "$output/test",
+            'last_created_folder' => "$output/test",
+            'output_path'         => "$output/test/"
         ],
         'project');
     }

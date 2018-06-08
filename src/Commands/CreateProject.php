@@ -30,9 +30,9 @@ class CreateProject extends JinitializeCommand
         $permissions = $this->getInput()->getOption('permissions') ?? 0755;
         $this->path = "$path/$name";
 
-        $this->export('projectName', $name);
-        $this->export('projectPath', $path);
-        $this->export('projectRoot', $this->path);
+        $this->export('name', $name);
+        $this->export('parent', $path);
+        $this->export('path', $this->path);
 
         /* Create project folder */
         $command = new CreateFolder($this->getPluginName());
@@ -40,7 +40,7 @@ class CreateProject extends JinitializeCommand
 
         /* Set output directory default to project root */
         $command = new SetOutputPath($this->getPluginName());
-        $command->run(new ArrayInput(['path' => $this->import('projectRoot')]), $output);
+        $command->run(new ArrayInput(['path' => $this->path]), $output);
 
         $output->writeLn("Project created: $this->path");
     }
