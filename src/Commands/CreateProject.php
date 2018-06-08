@@ -17,7 +17,7 @@ class CreateProject extends JinitializeCommand
         $this->setDescription('Create a new project directory.');
         $this->setHelp('Creates a new project at the given path and initializes project object for other commands.');
         $msg = 'Give access level for created folder in numeral code. Defaults to 0755';
-        $this->addOption('permissions', 'p', InputOption::VALUE_OPTIONAL, $msg);
+        $this->addOption('permissions', 'p', InputOption::VALUE_OPTIONAL, $msg, 0755);
 
         $msg = 'Folder path where the project should be created.';
         $this->addOption('path', 't', InputOption::VALUE_OPTIONAL, $msg);
@@ -27,7 +27,7 @@ class CreateProject extends JinitializeCommand
     {
         $path = $this->getPath($input, $style);
         $name = $style->ask('Give a name for the new project');
-        $permissions = $this->getInput()->getOption('permissions') ?? 0755;
+        $permissions = $this->getInput()->getOption('permissions');
         $this->path = "$path/$name";
 
         $this->export('name', $name);

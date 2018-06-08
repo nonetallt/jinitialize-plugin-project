@@ -17,14 +17,16 @@ class CreateFolder extends JinitializeCommand
         $this->setDescription('Create a new folder in the project directory.');
         $this->setHelp('');
         $this->addArgument('folder', InputArgument::REQUIRED, 'Give a name for the new folder');
-        $this->addOption('permissions', 'p', InputOption::VALUE_OPTIONAL, 'Give access level for created folder in numeral code. Defaults to 0755');
+
+        $msg = 'Give access level for created folder in numeral code. Defaults to 0755';
+        $this->addOption('permissions', 'p', InputOption::VALUE_OPTIONAL, $msg, 0755);
     }
 
     protected function handle($input, $output, $style)
     {
         $projectDir = $this->getProjectDir($style);
         $folder = $input->getArgument('folder');
-        $mode = $input->getOption('permissions') ?? 0755;
+        $mode = $input->getOption('permissions');
 
         /* Remove first slash from the folder argument to prevent double slash
             with getProjectDir
@@ -50,7 +52,7 @@ class CreateFolder extends JinitializeCommand
         return $projectDir;
     }
 
-    private function createFolder(string $path, $mode, $output) 
+    private function createFolder(string $path, int $mode, $output) 
     {
         if(file_exists($path)) {
             $this->abort("Folder $path can't be created, path already exists");
