@@ -42,7 +42,7 @@ class CreateProject extends JinitializeCommand
         $command = new SetOutputPath($this->getPluginName());
         $command->run(new ArrayInput(['path' => $this->path]), $output);
 
-        $output->writeLn("Project created: $this->path");
+        /* $output->writeLn("Project created: $this->path"); */
     }
 
     private function getPath($input, $style)

@@ -62,7 +62,7 @@ class CreateFolder extends JinitializeCommand
             $this->abort("Folder $path could not be created");
         }
 
-        $output->writeLn("Folder created: $path");
+        /* $output->writeLn("Folder created: $path"); */
         $this->folder = $path;
 
         $this->export('last_created_folder', $this->folder);
